@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,14 @@ const GamePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [content, setContent] = useState('');
   const [editedContent, setEditedContent] = useState('');
+
+  useEffect(() => {
+    const storageKey = `roblox-bugs-${game}`;
+    const savedContent = localStorage.getItem(storageKey);
+    if (savedContent) {
+      setContent(savedContent);
+    }
+  }, [game]);
 
   const gameNames: Record<string, string> = {
     'rivas': 'RIVAS',
@@ -31,6 +39,8 @@ const GamePage = () => {
   };
 
   const handleSave = () => {
+    const storageKey = `roblox-bugs-${game}`;
+    localStorage.setItem(storageKey, editedContent);
     setContent(editedContent);
     setIsAuthenticated(false);
     setIsEditorOpen(false);
